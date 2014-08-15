@@ -131,14 +131,27 @@ class Family(object):
         """
         
         ## YOUR CODE HERE ####
-        if a == b:
-			return (-1,0)
-		elif a.is_parent(b) or b.is_parent(a):
-			return (-1,0)
+        nodA = self.names_to_nodes[a]
+        nodB = self.names_to_nodes[b]
+        if nodA == nodB:
+            return (-1,0)
+        elif nodA.is_parent(nodB) or nodB.is_parent(nodA):
+            return (-1,0)
         else:
-            
-        raise NotImplementedError()
-
+            ancestorA = set([nodA])
+            ancestorB = set([nodB])
+            common = set([])
+            auxA = nodA
+            auxB = nodB
+            while len(common) < 1:
+                if auxA.get_parent() != None:
+                    auxA = auxA.get_parent()
+                if auxB.get_parent() != None:
+                    auxB = auxB.get_parent()
+                ancestorA.add(auxA)
+                ancestorB.add(auxB)
+                common = ancestorA & ancestorB 
+        return (min(len(ancestorA),len(ancestorB)) -2, abs(len(ancestorA) - len(ancestorB)))
 
 f = Family("a")
 f.set_children("a", ["b", "c"])
